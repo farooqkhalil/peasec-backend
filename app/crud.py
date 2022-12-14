@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import app.models as models
 import app.schemas as schemas
 import bcrypt
+import datetime
 
 
 def get_user_by_username(db: Session, username: str):
@@ -24,7 +25,8 @@ def check_username_password(db: Session, user: schemas.UserAuthenticate):
 
 
 def create_new_report(db: Session, report: schemas.ReportBase):
-    db_report = models.Report(user_id=1, title=report.title, content=report.content, type=report.type)
+    db_report = models.Report(user_id=1, title=report.title, content=report.content, type=report.type,
+                              lng=report.lng, lat=report.lat, time_created=datetime.datetime.utcnow())
     db.add(db_report)
     db.commit()
     db.refresh(db_report)

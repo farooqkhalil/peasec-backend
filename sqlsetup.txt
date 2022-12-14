@@ -12,8 +12,8 @@ Start Docker:
 docker start peasec-sql
 
 Setup DB:
-CREATE DATABASE main;
-USE main;
+CREATE DATABASE restapi;
+USE restapi;
 
 CREATE TABLE reports (report_id INT(11) NOT NULL AUTO_INCREMENT, lat DOUBLE DEFAULT 0, lng DOUBLE DEFAULT 0, title VARCHAR(20),
 details VARCHAR (255), PRIMARY KEY (report_id));

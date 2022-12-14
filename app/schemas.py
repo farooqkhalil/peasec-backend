@@ -34,6 +34,8 @@ class ReportBase(BaseModel):
     type: int
     title: str
     content: str
+    lng: float
+    lat: float
 
 
 class Report(ReportBase):

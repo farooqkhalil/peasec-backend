@@ -1,5 +1,6 @@
+import datetime
 import sqlalchemy.dialects.mysql
-from sqlalchemy import Column, Integer, String, BINARY, Text, VARCHAR, VARBINARY, CHAR, LargeBinary
+from sqlalchemy import Column, Integer, BINARY, VARCHAR, Float, DateTime
 from app.database import Base
 
 
@@ -20,6 +21,10 @@ class Report(Base):
     type = Column(Integer)
     title = Column(VARCHAR(30))
     content = Column(VARCHAR(255))
+    lng = Column(Float)
+    lat = Column(Float)
+    time_created = Column(DateTime, default=datetime.datetime.utcnow)
+
 
 
 class Blog(Base):
