@@ -11,4 +11,7 @@
 - Run main.py
 
 # To Run Docker
-docker compose up
+- In database.py change
+SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:password@localhost:3306/restapi"
+=> SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:password@db:3306/restapi"
+- run: docker compose up
