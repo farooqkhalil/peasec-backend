@@ -54,7 +54,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     return user
 
 
-# @app.post("/user", response_model=UserInfo)
+@app.post("/user", response_model=UserInfo)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_username(db, username=user.username)
     if db_user:
@@ -62,7 +62,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-# @app.post("/authenticate", response_model=Token)
+@app.post("/authenticate", response_model=Token)
 def authenticate_user(user: schemas.UserAuthenticate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_username(db, username=user.username)
     if db_user is None:

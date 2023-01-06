@@ -6,13 +6,13 @@ import datetime
 
 
 def get_user_by_username(db: Session, username: str):
-    return db.query(models.UserInfo).filter(models.UserInfo.username == username).first()
+    return db.query(models.UserCreds).filter(models.UserCreds.username == username).first()
 
 
 
 def create_user(db: Session, user: schemas.UserCreate):
     hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
-    db_user = models.UserInfo(username=user.username, password=hashed_password, fullname=user.fullname)
+    db_user = models.UserCreds(username=user.username, password=hashed_password, fullname=user.fullname)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -20,8 +20,8 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 
 def check_username_password(db: Session, user: schemas.UserAuthenticate):
-    db_user_info: models.UserInfo = get_user_by_username(db, username=user.username)
-    return bcrypt.checkpw(user.password.encode('utf-8'), db_user_info.password.encode('utf-8'))
+    db_user_info: models.UserCreds = get_user_by_username(db, username=user.username)
+    return bcrypt.checkpw(user.password.encode('utf-8'), db_user_info.password)
 
 
 def create_new_report(db: Session, report: schemas.ReportBase):

@@ -1,16 +1,15 @@
 import datetime
-import sqlalchemy.dialects.mysql
 from sqlalchemy import Column, Integer, BINARY, VARCHAR, Float, DateTime
 from app.database import Base
 
 
-class UserInfo(Base):
-    __tablename__ = "user_info"
+class UserCreds(Base):
+    __tablename__ = "user_creds"
 
     user_id = Column(Integer, primary_key=True, index=True)
     username = Column(VARCHAR(30), unique=True)
     password = Column(BINARY(60))
-    fullname = Column(VARCHAR(30), unique=True)
+    fullname = Column(VARCHAR(30))
 
 
 class Report(Base):
@@ -24,7 +23,6 @@ class Report(Base):
     lng = Column(Float)
     lat = Column(Float)
     time_created = Column(DateTime, default=datetime.datetime.utcnow)
-
 
 
 class Blog(Base):
