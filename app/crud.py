@@ -26,7 +26,8 @@ def check_username_password(db: Session, user: schemas.UserAuthenticate):
 
 def create_new_report(db: Session, report: schemas.ReportBase):
     db_report = models.Report(user_id=1, title=report.title, content=report.content, type=report.type,
-                              lng=report.lng, lat=report.lat, time_created=datetime.datetime.utcnow())
+                              lng=report.lng, lat=report.lat, country=report.country, image1=report.image1,
+                              image2=report.image2, image3=report.image3, time_created=datetime.datetime.utcnow())
     db.add(db_report)
     db.commit()
     db.refresh(db_report)
@@ -39,6 +40,10 @@ def get_all_reports(db: Session):
 
 def get_report_by_id(db: Session, report_id: int):
     return db.query(models.Report).filter(models.Report.report_id == report_id).first()
+
+
+def get_reports_by_country(db: Session, country: str):
+    return db.query(models.Report).filter(models.Report.country == country).all()
 
 
 def create_new_blog(db: Session, blog: schemas.BlogBase):

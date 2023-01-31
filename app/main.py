@@ -88,9 +88,15 @@ async def create_new_report(report: schemas.ReportBase
 
 
 # current_user: UserInfo = Depends(get_current_user),
-@app.get("/report")
+@app.get("/get_reports")
 async def get_all_reports(db: Session = Depends(get_db)):
     return crud.get_all_reports(db=db)
+
+
+# , current_user: UserInfo = Depends(get_current_user)
+@app.get("/report_by_country/{country}")
+async def get_reports_by_country(country, db: Session = Depends(get_db)):
+    return crud.get_reports_by_country(db=db, country=country)
 
 
 # , current_user: UserInfo = Depends(get_current_user)

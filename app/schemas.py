@@ -31,11 +31,15 @@ class TokenData(BaseModel):
 
 
 class ReportBase(BaseModel):
-    type: int
+    type: str
     title: str
     content: str
     lng: float
     lat: float
+    country: str
+    image1: str
+    image2: str
+    image3: str
 
 
 class Report(ReportBase):
