@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime
 import jwt
+from better_profanity import profanity
 secret_key = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 algorithm = "HS256"
 
@@ -17,10 +18,14 @@ def create_access_token(*, data: dict, expires_delta: timedelta = None):
 
 def decode_access_token(*, data: str):
     to_decode = data
-    return jwt.decode(to_decode, secret_key, algorithms=[algorithm])
+    payload = jwt.decode(to_decode, secret_key, algorithms=[algorithm])
+    username = payload.get("sub")
+    return username
 
 
-
+# Implement Hatespeech detection in this function
+def detect_hatespeech(data: str):
+    return profanity.contains_profanity(data)
 
 
 

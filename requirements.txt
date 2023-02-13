@@ -26,3 +26,5 @@ starlette==0.14.2
 toml==0.10.2
 typing-extensions==3.10.0.2
 uvicorn==0.15.0
+hatesonar==0.0.7
+better_profanity==0.7.0

@@ -24,8 +24,8 @@ def check_username_password(db: Session, user: schemas.UserAuthenticate):
     return bcrypt.checkpw(user.password.encode('utf-8'), db_user_info.password)
 
 
-def create_new_report(db: Session, report: schemas.ReportBase):
-    db_report = models.Report(user_id=1, title=report.title, content=report.content, type=report.type,
+def create_new_report(db: Session, report: schemas.ReportBase, user: schemas.UserInfo):
+    db_report = models.Report(user_id=user.user_id, title=report.title, content=report.content, type=report.type,
                               lng=report.lng, lat=report.lat, country=report.country, image1=report.image1,
                               image2=report.image2, image3=report.image3, time_created=datetime.datetime.utcnow())
     db.add(db_report)
@@ -34,12 +34,25 @@ def create_new_report(db: Session, report: schemas.ReportBase):
     return db_report
 
 
+def delete_report_by_id(db: Session, report_id: int):
+    db_report = get_report_by_id(db, report_id=report_id)
+    id=report_id
+    db.delete(db_report)
+    db.commit()
+    return id
+
+
 def get_all_reports(db: Session):
     return db.query(models.Report).all()
 
 
+def get_userid_by_reportid(db: Session, report_id: int):
+    return db.query(models.Report).filter(models.Report.report_id == report_id).first().user_id
+
+
 def get_report_by_id(db: Session, report_id: int):
     return db.query(models.Report).filter(models.Report.report_id == report_id).first()
+
 
 
 def get_reports_by_country(db: Session, country: str):

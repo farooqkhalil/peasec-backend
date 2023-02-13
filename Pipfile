@@ -13,6 +13,8 @@ mysql-connector-python = "*"
 bcrypt = "*"
 pytest = "*"
 pyjwt = {extras = ["crypto"], version = "*"}
+hatesonar = "*"
+better-profanity = "==0.7.0"
 
 [requires]
 python_version = "3.9"
