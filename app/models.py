@@ -1,6 +1,7 @@
 import datetime
-from sqlalchemy import Column, TEXT, Integer, BINARY, VARCHAR, Float, DateTime
+from sqlalchemy import Column, TEXT, Integer, BINARY, VARCHAR, Float, DateTime, ForeignKey
 from app.database import Base
+from sqlalchemy.orm import relationship
 
 
 class UserCreds(Base):
@@ -11,14 +12,15 @@ class UserCreds(Base):
     password = Column(BINARY(60))
     fullname = Column(VARCHAR(30))
 
+    report = relationship("Report", back_populates="user")
+
 
 class Report(Base):
-    __tablename__ = "report"
+    __tablename__ = "reports"
 
     report_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey("user_creds.user_id"))
     type = Column(VARCHAR(255))
-    title = Column(VARCHAR(30))
     content = Column(VARCHAR(255))
     lng = Column(Float)
     lat = Column(Float)
@@ -26,22 +28,7 @@ class Report(Base):
     image1 = Column(TEXT)
     image2 = Column(TEXT)
     image3 = Column(TEXT)
+    expiry_time = Column(DateTime, default=datetime.datetime(2022, 12, 28))
     time_created = Column(DateTime, default=datetime.datetime.utcnow)
 
-
-class Blog(Base):
-    __tablename__ = "blog"
-
-    blog_id = Column(Integer, primary_key=True, index=True)
-    title = Column(VARCHAR(30))
-    content = Column(VARCHAR(255))
-
-
-
-
-
-
-
-
-
-
+    user = relationship("UserCreds", back_populates="report")

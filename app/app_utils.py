@@ -28,6 +28,22 @@ def detect_hatespeech(data: str):
     return profanity.contains_profanity(data)
 
 
+# This function needs to be improved to cater for various types of events
+def det_expiry(event_type: str):
+    expiry = datetime.utcnow()
+    match event_type:
+        case "Demonstration":
+            expiry = expiry + timedelta(days=2)
+        case "Traffic Accident":
+            expiry = expiry + timedelta(days=1)
+        case "Explosion":
+            expiry = expiry + timedelta(days=3)
+        case "Natural Catastrophe":
+            expiry = expiry + timedelta(days=7)
+        case _:
+            expiry = expiry + timedelta(days=7)
+    return expiry
+
 
 
 

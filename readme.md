@@ -9,7 +9,7 @@
 - Setup pycharm using Pipfile
 - Run main.py
 
-# To Run Docker
+### To Run Docker
 - In database.py set
   - SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:password@db:3306/restapi"
 - run: docker compose up

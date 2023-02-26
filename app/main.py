@@ -2,7 +2,9 @@ import uvicorn
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import List
 from jwt import PyJWTError
+import json
 from sqlalchemy.orm import Session
 from fastapi import Depends, FastAPI, HTTPException
 import app.crud as crud
@@ -68,26 +70,6 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
    return user
 
 
-# async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-#     try:
-#         payload = decode_access_token(data=token)
-#         username: str = payload.get("sub")
-#         if username is None:
-#             raise credentials_exception
-#         token_data = TokenData(username=username)
-#     except PyJWTError:
-#         raise credentials_exception
-#     user = get_user_by_username(db, username=token_data.username)
-#     if user is None:
-#         raise credentials_exception
-#     return user
-
-
 @app.post("/user", response_model=UserInfo)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_username(db, username=user.username)
@@ -115,9 +97,10 @@ def authenticate_user(user: schemas.UserAuthenticate, db: Session = Depends(get_
 
 @app.post("/report", dependencies=[Depends(JWTBearer())], response_model=schemas.Report)
 async def create_new_report(report: schemas.ReportBase, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
-    if detect_hatespeech(report.title) or detect_hatespeech(report.content):
+    if detect_hatespeech(report.content):
         raise HTTPException(status_code=406, detail="Offensive Content not allowed")
     return crud.create_new_report(db=db, report=report, user=current_user)
+
 
 @app.post("/delete/{id}", dependencies=[Depends(JWTBearer())], response_model=int)
 async def delete_report_by_id(report_id, db: Session = Depends(get_db), current_user: UserInfo = Depends(get_current_user)):
@@ -147,32 +130,11 @@ async def get_report_by_id(report_id
                          , db: Session = Depends(get_db)):
     return crud.get_report_by_id(db=db, report_id=report_id)
 
-#
-# # , current_user: UserInfo = Depends(get_current_user)
-# # @app.post("/blog", response_model=schemas.Blog)
-# async def create_new_blog(blog: schemas.BlogBase
-#                           , current_user: UserInfo = Depends(get_current_user), db: Session = Depends(get_db)):
-#     return crud.create_new_blog(db=db, blog=blog)
-#
-#
-# # current_user: UserInfo = Depends(get_current_user),
-# # @app.get("/blog")
-# async def get_all_blogs(db: Session = Depends(get_db)):
-#     return crud.get_all_blogs(db=db)
-#
 
-# # @app.get("/blog/{blog_id}")
-# async def get_blog_by_id(blog_id, current_user: UserInfo = Depends(get_current_user)
-#                          , db: Session = Depends(get_db)):
-#     return crud.get_blog_by_id(db=db, blog_id=blog_id)
-#
-#
-# # @app.delete("/blog/{blog_id}",status_code=204)
-# async def delete_blog_by_id(blog_id, current_user: UserInfo = Depends(get_current_user)
-#                          , db: Session = Depends(get_db)):
-#     blog_delete = crud.get_blog_by_id(db=db,blog_id=blog_id)
-#     if blog_delete:
-#         crud.delete_blog_by_id(db=db,blog=blog_delete)
+@app.get("/report_locations", response_model=List[schemas.ReportLoc])
+async def get_all_report_locations(db: Session = Depends(get_db)):
+    reports = crud.get_all_reports(db=db)
+    return reports
 
 
 if __name__ == "__main__":

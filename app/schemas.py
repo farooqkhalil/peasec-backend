@@ -32,7 +32,6 @@ class TokenData(BaseModel):
 
 class ReportBase(BaseModel):
     type: str
-    title: str
     content: str
     lng: float
     lat: float
@@ -42,24 +41,20 @@ class ReportBase(BaseModel):
     image3: str
 
 
+class ReportLoc(BaseModel):
+    report_id: int
+    lng: float
+    lat: float
+
+    class Config:
+        orm_mode = True
+
+
 class Report(ReportBase):
     report_id: int
 
     class Config:
         orm_mode = True
-
-
-class BlogBase(BaseModel):
-    title: str
-    content: str
-
-
-class Blog(BlogBase):
-    blog_id: int
-
-    class Config:
-        orm_mode = True
-
 
 
 

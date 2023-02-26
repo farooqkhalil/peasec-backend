@@ -6,6 +6,7 @@ docker run --name peasec-sql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --r
 
 Connect to Docker:
 docker exec -it peasec-sql bash
+mysql -u root -p
 
 
 Start Docker:
@@ -15,14 +16,34 @@ Setup DB:
 CREATE DATABASE restapi;
 USE restapi;
 
-CREATE TABLE user_creds (user_id INT(11) NOT NULL AUTO_INCREMENT, username VARCHAR(30), password BINARY(60), fullname VARCHAR(30), PRIMARY KEY (user_id));
+CREATE TABLE user_creds (user_id INT(11) NOT NULL AUTO_INCREMENT, username VARCHAR(30), password BINARY(60),
+fullname VARCHAR(30), PRIMARY KEY (user_id));
 
 
-CREATE TABLE reports (report_id INT(11) NOT NULL AUTO_INCREMENT, title VARCHAR(20), details VARCHAR(255), lat DOUBLE DEFAULT 0, lng DOUBLE DEFAULT 0, country VARCHAR(30), image1 TEXT, image2 TEXT, image3 TEXT, PRIMARY KEY (report_id));
-
+CREATE TABLE reports (report_id INT(11) NOT NULL AUTO_INCREMENT, user_id INT(11), type VARCHAR(255), content VARCHAR(255),
+lat DOUBLE DEFAULT 0, lng DOUBLE DEFAULT 0, country VARCHAR(30), time_created datetime, expiry_time datetime,
+image1 TEXT, image2 TEXT, image3 TEXT, PRIMARY KEY (report_id),  FOREIGN KEY (user_id) REFERENCES user_creds(user_id));
 
 
 mysql> describe reports;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| report_id    | int          | NO   | PRI | NULL    | auto_increment |
+| user_id      | int          | YES  | MUL | NULL    |                |
+| type         | varchar(255) | YES  |     | NULL    |                |
+| content      | varchar(255) | YES  |     | NULL    |                |
+| lat          | double       | YES  |     | 0       |                |
+| lng          | double       | YES  |     | 0       |                |
+| country      | varchar(30)  | YES  |     | NULL    |                |
+| time_created | datetime     | YES  |     | NULL    |                |
+| expiry_time  | datetime     | YES  |     | NULL    |                |
+| image1       | text         | YES  |     | NULL    |                |
+| image2       | text         | YES  |     | NULL    |                |
+| image3       | text         | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+
 +-----------+--------------+------+-----+---------+----------------+
 | Field     | Type         | Null | Key | Default | Extra          |
 +-----------+--------------+------+-----+---------+----------------+
