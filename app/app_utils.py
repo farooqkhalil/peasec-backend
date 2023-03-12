@@ -38,6 +38,10 @@ def det_expiry(event_type: str):
             expiry = expiry + timedelta(days=1)
         case "Explosion":
             expiry = expiry + timedelta(days=3)
+        case "Violent Demonstration":
+            expiry = expiry + timedelta(days=3)
+        case "Chemical Hazard":
+            expiry = expiry + timedelta(days=5)
         case "Natural Catastrophe":
             expiry = expiry + timedelta(days=7)
         case _:
